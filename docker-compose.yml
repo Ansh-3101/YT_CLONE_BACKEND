@@ -1,0 +1,74 @@
+# version: '3.8'
+
+# services:
+#   mysqldb:
+#     image: mysql:8.0.36
+#     restart: unless-stopped
+#     env_file: ./.env
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=$DATABASE_PASSWORD
+#       - MYSQL_DATABASE=$DATABASE_NAME
+#       - MYSQL_USER=$DATABASE_USERNAME
+#       - MYSQL_PASSWORD=$DATABASE_PASSWORD
+#       - MYSQL_AUTH_PLUGIN=mysql_native_password
+#     ports:
+#       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+#     volumes:
+#       - db:/var/lib/mysql
+#   app:
+#     depends_on:
+#       - mysqldb
+#     build: ./
+#     restart: unless-stopped
+#     env_file: ./.env
+#     ports:
+#       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+#     environment:
+#       - DB_HOST=mysqldb
+#       - DB_USER=$DATABASE_USERNAME
+#       - DB_PASSWORD=$DATABASE_PASSWORD
+#       - DB_NAME=$DATABASE_NAME
+#       - DB_PORT=$MYSQLDB_DOCKER_PORT
+#     stdin_open: true
+#     tty: true
+
+# volumes: 
+#   db: 
+
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678
+      - MYSQL_NATIVE_PASSWORD=12345678
+      - MYSQL_DATABASE=YTCLONE
+      - MYSQL_USER=$DATABASE_USERNAME
+      - MYSQL_PASSWORD=12345678
+      - MYSQL_AUTH_PLUGIN=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysqldb
+    build: ./
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=root
+      - DB_PASSWORD=12345678
+      - DB_NAME=YTCLONE
+      - DB_PORT=3306
+    stdin_open: true
+    tty: true
+
+volumes: 
+  db: 
